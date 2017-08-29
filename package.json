@@ -1,0 +1,37 @@
+{
+  "name": "redux-promise-memo",
+  "version": "0.1.0",
+  "description": "memoization for promise-based Redux action creators",
+  "author": "saltycrane",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/saltycrane/redux-promise-memo.git"
+  },
+  "keywords": [
+    "cache",
+    "memoize",
+    "memoization",
+    "middleware",
+    "promise",
+    "redux"
+  ],
+  "main": "./lib/index.js",
+  "scripts": {
+    "build": "babel src --out-dir lib",
+    "flow": "flow",
+    "prepublish": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "peerDependencies": {
+    "redux": ">=3.1.0",
+    "redux-thunk": ">=1.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "6.26.0",
+    "babel-plugin-transform-object-rest-spread": "6.26.0",
+    "babel-preset-env": "1.6.0",
+    "babel-preset-flow": "6.23.0",
+    "flow-bin": "0.56.0"
+  }
+}

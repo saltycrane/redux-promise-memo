@@ -1,0 +1,26 @@
+[ignore]
+# fbjs lib problems
+.*/node_modules/fbjs/.*
+# radium lib problems
+.*/node_modules/radium/.*
+
+[include]
+
+[libs]
+flow/
+flow-typed/
+
+[options]
+suppress_comment=\\(.\\|\n\\)*\\$FlowFixMe
+suppress_comment=\\(.\\|\n\\)*\\$FlowIgnore
+
+module.ignore_non_literal_requires=true
+
+module.name_mapper='^root/\(.*\)'->'<PROJECT_ROOT>/\1'
+module.name_mapper='^src/\(.*\)'->'<PROJECT_ROOT>/src/\1'
+module.name_mapper='^assets/\(.*\)'->'<PROJECT_ROOT>/assets/\1'
+module.name_mapper='^shared/\(.*\)'->'<PROJECT_ROOT>/src/shared/\1'
+module.name_mapper='^config/\(.*\)'->'<PROJECT_ROOT>/src/config/\1'
+module.name_mapper='^apps/\(.*\)'->'<PROJECT_ROOT>/src/apps/\1'
+module.name_mapper='^compiled/\(.*\)'->'<PROJECT_ROOT>/node_modules/\1'
+module.name_mapper='^main/\(.*\)'->'<PROJECT_ROOT>/src/apps/main/\1'
