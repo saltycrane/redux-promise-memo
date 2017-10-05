@@ -1,10 +1,11 @@
 # redux-promise-memo
 
-`redux-promise-memo` lets you "memoize" asynchronous, promise-based, action
-creators. If the promise has completed successfully, it will not be dispatched
-again unless the action creator arguments change. The memoized action creator
-can be called multiple times (e.g. in `componentDidUpdate`) and it will do
-nothing unless the arguments change.
+`redux-promise-memo` lets you "memoize" asynchronous,
+promise-based, [Redux](https://github.com/reactjs/redux) action creators. If the
+promise has completed successfully, it will not be dispatched again unless the
+action creator arguments change. The memoized action creator can be called
+multiple times (e.g. in React's `componentDidUpdate`) and it will do nothing
+unless the arguments change.
 
 "memoize" is in quotes because it remembers meta information about the action
 creator but not the actual data. Apps that use Redux are already "caching" the
@@ -12,7 +13,10 @@ data in Redux state.
 
  - it also does not dispatch duplicate actions if the promise is in a pending state
    (e.g. API data is loading)
- - it works stand-alone, with `redux-promise-middleware`, or GlueStick's `promiseMiddleware`
+ - it works stand-alone, with
+   [`redux-promise-middleware`](https://github.com/pburtchaell/redux-promise-middleware),
+   or [GlueStick](https://github.com/TrueCar/gluestick)'s
+   [`promiseMiddleware`](https://github.com/TrueCar/gluestick/blob/v1.13.7/packages/gluestick/shared/lib/promiseMiddleware.js)
  - it works with client side and server side rendering (universal / isomorphic apps)
    because metadata is stored in Redux state
  - it supports either a single cache per action type or infinite caches per action type
@@ -30,6 +34,16 @@ data in Redux state.
 > authenticated...
  
 from https://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator/35674575#35674575
+
+## How it works
+
+- [middleware](https://github.com/saltycrane/redux-promise-memo/src/promiseMiddleware.js) is
+  used to dispatch an action for each of the 3 promise states
+- a [reducer](https://github.com/saltycrane/redux-promise-memo/src/createReducer.js) stores
+  the status of each promise per a memoization key and argument list in the Redux state.
+- the action creator [decorator](https://github.com/saltycrane/redux-promise-memo/src/memoize.js)
+  reads the Redux state (using `redux-thunk`) and dispatches the action if the action
+  creator arguments have changed or does nothing if not.
 
 ## Install
 
@@ -103,6 +117,12 @@ type Config = {
 };
 ```
 
+## Examples
+
+- [basic-example](https://github.com/saltycrane/redux-promise-memo/examples/basic-example)
+- [with-gluestick](https://github.com/saltycrane/redux-promise-memo/examples/with-gluestick)
+- [with-redux-promise-middleware](https://github.com/saltycrane/redux-promise-memo/examples/with-redux-promise-middleware)
+
 ## Assumptions / limitations
 
 - it does not work with `redux-thunk` action creators
@@ -113,12 +133,6 @@ type Config = {
   rendering, the Redux state is preserved, allowing for memoization from server
   to client. But the return value variable is not preserved so the promise
   resolved value cannot be used. An empty resolved promise is returned instead.
-
-## Examples
-
-- [basic-example](https://github.com/saltycrane/redux-promise-memo/examples/basic-example)
-- [with-gluestick](https://github.com/saltycrane/redux-promise-memo/examples/with-gluestick)
-- [with-redux-promise-middleware](https://github.com/saltycrane/redux-promise-memo/examples/with-redux-promise-middleware)
 
 ## API
 
