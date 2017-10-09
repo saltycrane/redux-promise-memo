@@ -7,22 +7,26 @@ action creator arguments change. The memoized action creator can be called
 multiple times (e.g. in React's `componentDidUpdate`) and it will do nothing
 unless the arguments change.
 
-"memoize" is in quotes because it remembers meta information about the action
-creator but not the actual data. Apps that use Redux are already "caching" the
-data in Redux state.
+"memoize" is in quotes because it remembers metadata about the action creator
+but not the actual data. Apps that use Redux are already "caching" the data in
+Redux state.
 
  - it also does not dispatch duplicate actions if the promise is in a pending state
    (e.g. API data is loading)
  - it works stand-alone, with
    [`redux-promise-middleware`](https://github.com/pburtchaell/redux-promise-middleware),
-   or [GlueStick](https://github.com/TrueCar/gluestick)'s
-   [`promiseMiddleware`](https://github.com/TrueCar/gluestick/blob/v1.13.7/packages/gluestick/shared/lib/promiseMiddleware.js)
+   [GlueStick](https://github.com/TrueCar/gluestick)'s
+   [`promiseMiddleware`](https://github.com/TrueCar/gluestick/blob/v1.13.7/packages/gluestick/shared/lib/promiseMiddleware.js),
+   or [`redux-pack`](https://github.com/lelandrichardson/redux-pack). (Other promise
+   middleware may be used if appropriate `initMatcher`, `failureMatcher`, and
+   `successMatcher` functions can be written. See the Configuration section below.)
  - it works with client side and server side rendering (universal / isomorphic apps)
    because metadata is stored in Redux state
  - it supports either a single cache per action type or infinite caches per action type
    (see `multipleCaches` option passed to `memoize`)
  - it supports cache invalidation by providing an app-specific invalidation function
    (see `invalidate` config passed to `createMemoReducer`)
+ - it is [1.1 kB minified + gzipped](https://bundlephobia.com/result?p=redux-promise-memo@0.1.0)
 
 ## Inspiration
 
@@ -37,11 +41,11 @@ from https://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-ac
 
 ## How it works
 
-- [middleware](https://github.com/saltycrane/redux-promise-memo/src/promiseMiddleware.js) is
+- [middleware](https://github.com/saltycrane/redux-promise-memo/blob/master/src/promiseMiddleware.js) is
   used to dispatch an action for each of the 3 promise states
-- a [reducer](https://github.com/saltycrane/redux-promise-memo/src/createReducer.js) stores
+- a [reducer](https://github.com/saltycrane/redux-promise-memo/blob/master/src/createReducer.js) stores
   the status of each promise per a memoization key and argument list in the Redux state.
-- the action creator [decorator](https://github.com/saltycrane/redux-promise-memo/src/memoize.js)
+- the action creator [decorator](https://github.com/saltycrane/redux-promise-memo/blob/master/src/memoize.js)
   reads the Redux state (using `redux-thunk`) and dispatches the action if the action
   creator arguments have changed or does nothing if not.
 
@@ -63,7 +67,7 @@ yarn add redux-promise-memo redux-thunk
 ## Usage (stand alone)
 
 `path/to/your/root/reducer`:
-```
+```js
 import { combineReducers } from "redux";
 import { createMemoReducer } from "redux-promise-memo";
 
@@ -79,7 +83,7 @@ export default rootReducer;
 ```
 
 `configureStore.js`:
-```
+```js
 import { applyMiddleware, createStore } from "redux";
 import { createMemoReducer, promiseMiddleware } from "redux-promise-memo";
 import thunk from "redux-thunk";
@@ -91,7 +95,7 @@ const store = createStore(reducer, applyMiddleware(...middleware));
 
 `actions.js`:
 
-```
+```js
 import { memoize } from "redux-promise-memo";
 
 const fetchSomething = (id) => ({
@@ -108,7 +112,7 @@ See `examples/basic-example/src/index.js` for a full working example.
 
 `createMemoReducer` can optionally be passed a configuration object.
 
-```
+```js
 type Config = {
   invalidate: (state: State, action: Object) => boolean,
   initMatcher: (action: Object) => boolean,
@@ -121,6 +125,7 @@ type Config = {
 
 - [basic-example](https://github.com/saltycrane/redux-promise-memo/examples/basic-example)
 - [with-gluestick](https://github.com/saltycrane/redux-promise-memo/examples/with-gluestick)
+- [with-redux-pack](https://github.com/saltycrane/redux-promise-memo/examples/with-redux-pack)
 - [with-redux-promise-middleware](https://github.com/saltycrane/redux-promise-memo/examples/with-redux-promise-middleware)
 
 ## Assumptions / limitations
@@ -150,6 +155,14 @@ type Config = {
       failureMatcher = action => boolean,
       successMatcher = action => boolean,
     }
+
+   invalidate should return true if the _memo state should be cleared
+
+   initMatcher should return true if the init action was dispatched
+
+   failureMatcher should return true if the failure action was dispatched
+
+   successMatcher should return true if the success action was dispatched
    ```
 
 - `defaultConfig` - this is the default config that is used if no config object is
@@ -167,6 +180,14 @@ type Config = {
 
     Assumptions:
       - the action creator returns a simple object (i.e. it is not a thunk action creator)
+      
+    `actionCreator` (function that returns an object literal) - the action creator to
+      be "memoized"
+      
+    `key` (string) - the primary memoization key. It is recommended to use the action type
+      as the key. The secondary memoization key is the argument list passed to `JSON.stringify`.
+    
+    `options` (Object):
 
     `multipleCaches` option:
 
