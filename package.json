@@ -1,6 +1,6 @@
 {
   "name": "redux-promise-memo",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "memoization for promise-based Redux action creators",
   "author": "saltycrane",
   "license": "MIT",
@@ -21,17 +21,23 @@
     "build": "babel src --out-dir lib",
     "flow": "flow",
     "prepublish": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --testPathIgnorePatterns examples"
   },
   "peerDependencies": {
     "redux": ">=3.1.0",
     "redux-thunk": ">=1.0.0"
   },
+  "//": [
+    "redux and redux-thunk are included in devDependencies for unit tests"
+  ],
   "devDependencies": {
     "babel-cli": "6.26.0",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
     "babel-preset-env": "1.6.0",
     "babel-preset-flow": "6.23.0",
-    "flow-bin": "0.56.0"
+    "flow-bin": "0.56.0",
+    "jest": "21.2.1",
+    "redux": "3.7.2",
+    "redux-thunk": "2.2.0"
   }
 }

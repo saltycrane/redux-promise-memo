@@ -229,6 +229,10 @@ See `examples/basic-example/src/index.js` for a full working example.
 
 ## Changelog
 
+### 0.2.1
+
+- add some unit tests
+
 ### 0.2.0
 
 - add support for invalidating only specific keys using the `invalidate` function passed to
