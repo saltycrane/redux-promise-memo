@@ -1,7 +1,7 @@
 /* @flow */
 
 export type Config = {
-  invalidate: (state: State, action: Object) => boolean,
+  invalidate: (action: Object) => boolean | Array<string>,
   initMatcher: (action: Object) => boolean,
   successMatcher: (action: Object) => boolean,
   failureMatcher: (action: Object) => boolean,

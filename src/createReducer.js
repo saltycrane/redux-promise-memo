@@ -33,7 +33,18 @@ const createReducer = (
   const reducer = (state: State = {}, action: Object) => {
     const { type, meta: { memoKey } = {} } = action;
 
-    if (invalidate(state, action)) {
+    const keysToInvalidate = invalidate(action);
+    if (keysToInvalidate) {
+      // if `invalidate` returns an array, it is an array of keys to remove so remove those keys
+      if (Array.isArray(keysToInvalidate)) {
+        return Object.keys(state).reduce((memo, key) => {
+          if (!keysToInvalidate.includes(key)) {
+            memo[key] = state[key];
+          }
+          return memo;
+        }, {});
+      }
+      // if it is not an array (and it is true), clear all the keys
       return {};
     }
 

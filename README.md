@@ -19,7 +19,7 @@ Redux state.
    [`promiseMiddleware`](https://github.com/TrueCar/gluestick/blob/v1.13.7/packages/gluestick/shared/lib/promiseMiddleware.js),
    or [`redux-pack`](https://github.com/lelandrichardson/redux-pack). (Other promise
    middleware may be used if appropriate `initMatcher`, `failureMatcher`, and
-   `successMatcher` functions can be written. See the Configuration section below.)
+   `successMatcher` functions can be written. See the documentation for `createMemoReducer` below.)
  - it works with client side and server side rendering (universal / isomorphic apps)
    because metadata is stored in Redux state
  - it supports either a single cache per action type or infinite caches per action type
@@ -36,7 +36,7 @@ Redux state.
 > a good idea. The few use cases where I think it’s acceptable is for checking
 > cached data before you make a request, or for checking whether you are
 > authenticated...
- 
+
 from https://stackoverflow.com/questions/35667249/accessing-redux-state-in-an-action-creator/35674575#35674575
 
 ## How it works
@@ -108,19 +108,6 @@ export const memoizedFetchSomething = memoize(fetchSomething, "FETCH_SOMETHING")
 Then use `memoizedFetchSomething` the same way you would have used `fetchSomething`.
 See `examples/basic-example/src/index.js` for a full working example.
 
-## Configuration
-
-`createMemoReducer` can optionally be passed a configuration object.
-
-```js
-type Config = {
-  invalidate: (state: State, action: Object) => boolean,
-  initMatcher: (action: Object) => boolean,
-  successMatcher: (action: Object) => boolean,
-  failureMatcher: (action: Object) => boolean,
-};
-```
-
 ## Examples
 
 - [basic-example](https://github.com/saltycrane/redux-promise-memo/examples/basic-example)
@@ -144,19 +131,20 @@ type Config = {
 - `createMemoReducer(config)`
    ```
    Return a reducer that must be used with the `memoize` decorator.
-   
+
    IMPORTANT: the reducer must be added to the root reducer using the key name `_memo`.
-   
+
    `config` (Object):
 
     {
-      invalidate: (state, action) => boolean,
+      invalidate: action => boolean | Array<string>,
       initMatcher: action => boolean,
       failureMatcher = action => boolean,
       successMatcher = action => boolean,
     }
 
-   invalidate should return true if the _memo state should be cleared
+   invalidate should return true if all the keys in the _memo state should be cleared.
+     If it returns an array of keys, only those keys will be cleared.
 
    initMatcher should return true if the init action was dispatched
 
@@ -177,16 +165,17 @@ type Config = {
     The memoized version will not dispatch the action if:
       - the promise has not resolved (e.g. api request is still loading)
       - the action has already been dispatched with the same arguments
+      - the original action creator returns null (or a falsey value)
 
     Assumptions:
       - the action creator returns a simple object (i.e. it is not a thunk action creator)
-      
+
     `actionCreator` (function that returns an object literal) - the action creator to
       be "memoized"
-      
+
     `key` (string) - the primary memoization key. It is recommended to use the action type
       as the key. The secondary memoization key is the argument list passed to `JSON.stringify`.
-    
+
     `options` (Object):
 
     `multipleCaches` option:
@@ -209,34 +198,56 @@ type Config = {
 
    ```
    For a given action:
-   
+
    const fetchSomething = () => ({
      type: "FETCH_SOMETHING",
      promisse: fetch("/something")
    });
-   
+
    promiseMiddleware will dispatch 2 actions. The first is dispatched immediately:
-   
+
    {
      type: "FETCH_SOMETHING_INIT"
    }
-   
+
    the second action is dispatched either after the promise is fulfilled:
-   
+
    {
      type: "FETCH_SOMETHING",
      payload: "the payload is set to the resolved value of the promise"
    }
-   
+
    or when the promise is rejected:
-   
+
    {
      type: "FETCH_SOMETHING_FAILURE",
      error: "error goes here"
    }
-   
+
    promiseMiddleware was copied from GlueStick
    ```
+
+## Changelog
+
+### 0.2.0
+
+- add support for invalidating only specific keys using the `invalidate` function passed to
+  `createMemoReducer`.
+- Breaking: change `invalidate` function signature to only accept the action instead of the
+  state and the action.
+
+### 0.1.0
+
+- store action creator arguments in Redux instead of testing if arguments are
+  equal using lodash.isequal
+- manually specify memoization key so that `promise` can be a promise instead of
+  a function returning a promise
+- simplify data stored from an object of 3 booleans to a string having 3 values
+- add config option to provide support for other middleware
+
+### before 0.1.0
+
+- [here is a version](https://github.com/saltycrane/kage/blob/efa3884955217b2e08fb053a50c88a894d9a1145/redux-api-memoization.js) of this before an npm package was created
 
 ## To do
 
