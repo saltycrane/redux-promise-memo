@@ -243,7 +243,8 @@ See `examples/basic-example/src/index.js` for a full working example.
 ### 0.1.0
 
 - store action creator arguments in Redux instead of testing if arguments are
-  equal using lodash.isequal
+  equal using `lodash.isEqual`. This allows removing the external lodash dependency
+  and removes doing the potentially expensive deep comparison.
 - manually specify memoization key so that `promise` can be a promise instead of
   a function returning a promise
 - simplify data stored from an object of 3 booleans to a string having 3 values
