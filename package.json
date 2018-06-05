@@ -20,8 +20,20 @@
   "scripts": {
     "build": "babel src --out-dir lib",
     "flow": "flow",
+    "precommit": "lint-staged",
     "prepublish": "npm run build",
+    "prettier": "prettier --write 'src/**/**.js'",
     "test": "jest --testPathIgnorePatterns examples"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "prettier": {
+    "parser": "flow",
+    "trailingComma": "all"
   },
   "peerDependencies": {
     "redux": ">=3.1.0",
@@ -37,6 +49,7 @@
     "babel-preset-flow": "6.23.0",
     "flow-bin": "0.56.0",
     "jest": "21.2.1",
+    "prettier": "1.13.4",
     "redux": "3.7.2",
     "redux-thunk": "2.2.0"
   }

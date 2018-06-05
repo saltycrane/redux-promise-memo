@@ -3,7 +3,9 @@
  * This promise middleware was copied from GlueStick.
  * https://github.com/TrueCar/gluestick/blob/v1.13.7/packages/gluestick/shared/lib/promiseMiddleware.js
  */
-const promiseMiddleware = (store: Object) => (next: Function) => (action: Object) => {
+const promiseMiddleware = (store: Object) => (next: Function) => (
+  action: Object,
+) => {
   const { type, promise, ...rest } = action;
 
   if (!promise) {

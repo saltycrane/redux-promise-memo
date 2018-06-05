@@ -4,13 +4,20 @@ import type { MemoizeOptions } from "./types";
 /**
  * Return a "memoized" version of a promise action creator.
  */
-const memoize = (actionCreator: Function, memoKey: string, options: MemoizeOptions = {}) => {
+const memoize = (
+  actionCreator: Function,
+  memoKey: string,
+  options: MemoizeOptions = {},
+) => {
   // `returnVal` is used to store the promise returned by dispatching the action so
   // it can be returned if loading or cached. See Note 2 in the docstring above.
   const returnVal = {};
   const { multipleCaches = false } = options;
 
-  const newActionCreator = (...args: Array<*>) => (dispatch: Function, getState: Function) => {
+  const newActionCreator = (...args: Array<*>) => (
+    dispatch: Function,
+    getState: Function,
+  ) => {
     const isDev = process.env.NODE_ENV !== "production";
     const state = getState();
     const memoSubKey = JSON.stringify(args);

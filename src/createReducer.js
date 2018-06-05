@@ -5,11 +5,16 @@ import type { Config, State } from "./types";
 /**
  * Reducer used to support the `memoize` decorator below
  */
-const createReducer = (
-  { invalidate, initMatcher, successMatcher, failureMatcher }: Config = defaultConfig,
-) => {
+const createReducer = ({
+  invalidate,
+  initMatcher,
+  successMatcher,
+  failureMatcher,
+}: Config = defaultConfig) => {
   const _setStatus = (state, action, status) => {
-    const { meta: { memoKey, memoSubKey, multipleCaches } } = action;
+    const {
+      meta: { memoKey, memoSubKey, multipleCaches },
+    } = action;
 
     if (multipleCaches) {
       // *merge* status with existing status if `multipleCaches` option is *true*
