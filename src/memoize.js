@@ -53,7 +53,6 @@ const memoize = (
 
     // support returning null from action creator to do nothing
     if (!action) {
-      // $FlowFixMe
       return Promise.resolve();
     }
 
