@@ -229,6 +229,11 @@ See `examples/basic-example/src/index.js` for a full working example.
 
 ## Changelog
 
+### 0.2.2
+
+- configure and run Prettier
+- upgrade Flow and remove $FlowFixMe comment
+
 ### 0.2.1
 
 - add some unit tests
