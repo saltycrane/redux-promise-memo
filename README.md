@@ -110,10 +110,10 @@ See `examples/basic-example/src/index.js` for a full working example.
 
 ## Examples
 
-- [basic-example](https://github.com/saltycrane/redux-promise-memo/examples/basic-example)
-- [with-gluestick](https://github.com/saltycrane/redux-promise-memo/examples/with-gluestick)
-- [with-redux-pack](https://github.com/saltycrane/redux-promise-memo/examples/with-redux-pack)
-- [with-redux-promise-middleware](https://github.com/saltycrane/redux-promise-memo/examples/with-redux-promise-middleware)
+- [basic-example](https://github.com/saltycrane/redux-promise-memo/tree/master/examples/basic-example)
+- [with-gluestick](https://github.com/saltycrane/redux-promise-memo/tree/master/examples/with-gluestick)
+- [with-redux-pack](https://github.com/saltycrane/redux-promise-memo/tree/master/examples/with-redux-pack)
+- [with-redux-promise-middleware](https://github.com/saltycrane/redux-promise-memo/tree/master/examples/with-redux-promise-middleware)
 
 ## Assumptions / limitations
 

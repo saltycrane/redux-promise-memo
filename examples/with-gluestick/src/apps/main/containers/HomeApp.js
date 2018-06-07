@@ -31,7 +31,7 @@ class HomeApp extends Component {
     return (
       <div>
         <h2>Basic example</h2>
-        <p>Open your browser's developer tools console to view logging</p>
+        <p>Open the developer tools console in the browser to view logging</p>
         <button onClick={() => this.setState({ a: a + 1 })}>Change prop a</button>
         <button onClick={() => this.setState({ b: b + 1 })}>Change prop b</button>
         <hr />
