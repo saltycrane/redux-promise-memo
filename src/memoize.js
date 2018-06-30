@@ -51,6 +51,15 @@ const memoize = (
     // `returnVal` to return in "cached" or "loading" scenarios.
     const action = actionCreator(...args);
 
+    // thunk action creators are not supported so throw an error
+    if (typeof action === "function") {
+      throw new Error(
+        `thunk action creators cannot be used with redux-promise-memo. ${
+          actionCreator.name
+        } should return an object instead of a function.`,
+      );
+    }
+
     // support returning null from action creator to do nothing
     if (!action) {
       return Promise.resolve();

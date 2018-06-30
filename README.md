@@ -229,6 +229,10 @@ See `examples/basic-example/src/index.js` for a full working example.
 
 ## Changelog
 
+### 0.2.3
+
+- add an error for thunk action creators
+
 ### 0.2.2
 
 - configure and run Prettier

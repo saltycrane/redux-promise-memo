@@ -1,6 +1,6 @@
 {
   "name": "redux-promise-memo",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "memoization for promise-based Redux action creators",
   "author": "saltycrane",
   "license": "MIT",
@@ -49,7 +49,7 @@
     "babel-preset-flow": "6.23.0",
     "flow-bin": "0.73.0",
     "jest": "21.2.1",
-    "prettier": "1.13.4",
+    "prettier": "1.13.7",
     "redux": "3.7.2",
     "redux-thunk": "2.2.0"
   }
